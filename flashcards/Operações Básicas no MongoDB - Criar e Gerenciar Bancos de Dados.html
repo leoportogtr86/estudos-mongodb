@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Cards MongoDB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .flash-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+            height: 200px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.5s;
+            display: none;
+        }
+        .flash-card:hover {
+            transform: scale(1.05);
+        }
+        .flash-card.active {
+            display: block;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #634caf;
+        }
+        .answer {
+            display: none;
+            font-size: 16px;
+            color: #634caf;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #634caf;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #634caf;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            width: 320px;
+        }
+        code {
+            background-color: #bbbbc1;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #634caf;
+        }
+        h2 {
+            color: #7159be;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flash Cards</h1>
+    <h2>Operações Básicas no MongoDB - Criar e Gerenciar Bancos de Dados</h2>
+    <div class="flash-card active">
+        <div class="question">Como conectar ao MongoDB usando a linha de comando?</div>
+        <div class="answer">Execute o comando <code>mongo</code> no terminal.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um banco de dados no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db = client.meuBancoDeDados</code> e depois <code>db.minhaColecao.insert_one({"nome": "Alice", "idade": 30})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar todos os bancos de dados no MongoDB usando a linha de comando?</div>
+        <div class="answer">Execute <code>show dbs</code> no terminal do MongoDB.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir um banco de dados no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>client.meuBancoDeDados.drop_database()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar um documento específico no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.findOne({nome: "Alice"})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.createCollection("minhaColecao")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar coleções no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>show collections</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como renomear uma coleção no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.renameCollection("novaColecao")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir uma coleção no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.drop()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir um único documento no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.insertOne({nome: "João", idade: 25})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir múltiplos documentos no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.insertMany([{nome: "Ana", idade: 22}, {nome: "Pedro", idade: 28}])</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar todos os documentos de uma coleção no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.find()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar um documento específico no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.findOne({nome: "Ana"})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar um único documento no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.updateOne({nome: "Ana"}, {$set: {idade: 23}})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar múltiplos documentos no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.updateMany({idade: {$lt: 30}}, {$set: {status: "jovem"}})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir um único documento no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.deleteOne({nome: "Pedro"})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir múltiplos documentos no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use <code>db.minhaColecao.deleteMany({idade: {$lt: 25}})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.create_collection("minhaNovaColecao")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar coleções no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.list_collection_names()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como renomear uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.rename("novaColecao")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.drop()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir um único documento no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.insert_one({"nome": "João", "idade": 25})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir múltiplos documentos no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.insert_many([{"nome": "Ana", "idade": 22}, {"nome": "Pedro", "idade": 28}])</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar todos os documentos de uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.find()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar um documento específico no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.find_one({"nome": "Ana"})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar um único documento no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.update_one({"nome": "Ana"}, {"$set": {"idade": 23}})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar múltiplos documentos no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.update_many({"idade": {"$lt": 30}}, {"$set": {"status": "jovem"}})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir um único documento no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.delete_one({"nome": "Pedro"})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir múltiplos documentos no MongoDB usando PyMongo?</div>
+        <div class="answer">Use <code>db.minhaColecao.delete_many({"idade": {"$lt": 25}})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como conectar ao MongoDB usando o driver Node.js?</div>
+        <div class="answer">Use <code>const { MongoClient } = require('mongodb'); const client = new MongoClient('mongodb://localhost:27017');</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um banco de dados no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>const db = client.db('meuBancoDeDados');</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.createCollection('minhaColecao');</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir um único documento no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.collection('minhaColecao').insertOne({nome: "João", idade: 25});</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir múltiplos documentos no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.collection('minhaColecao').insertMany([{nome: "Ana", idade: 22}, {nome: "Pedro", idade: 28}]);</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar todos os documentos de uma coleção no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.collection('minhaColecao').find().toArray();</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar um documento específico no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.collection('minhaColecao').findOne({nome: "Ana"});</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar um único documento no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.collection('minhaColecao').updateOne({nome: "Ana"}, {$set: {idade: 23}});</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar múltiplos documentos no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.collection('minhaColecao').updateMany({idade: {$lt: 30}}, {$set: {status: "jovem"}});</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir um único documento no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.collection('minhaColecao').deleteOne({nome: "Pedro"});</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir múltiplos documentos no MongoDB usando Node.js?</div>
+        <div class="answer">Use <code>db.collection('minhaColecao').deleteMany({idade: {$lt: 25}});</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como conectar ao MongoDB usando Java?</div>
+        <div class="answer">Use <code>MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um banco de dados no MongoDB usando Java?</div>
+        <div class="answer">Use <code>MongoDatabase database = mongoClient.getDatabase("meuBancoDeDados");</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção no MongoDB usando Java?</div>
+        <div class="answer">Use <code>database.createCollection("minhaColecao");</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir um único documento no MongoDB usando Java?</div>
+        <div class="answer">Use <code>collection.insertOne(new Document("nome", "João").append("idade", 25));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir múltiplos documentos no MongoDB usando Java?</div>
+        <div class="answer">Use <code>collection.insertMany(Arrays.asList(new Document("nome", "Ana").append("idade", 22), new Document("nome", "Pedro").append("idade", 28)));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar todos os documentos de uma coleção no MongoDB usando Java?</div>
+        <div class="answer">Use <code>collection.find().into(new ArrayList<Document>());</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar um documento específico no MongoDB usando Java?</div>
+        <div class="answer">Use <code>collection.find(eq("nome", "Ana")).first();</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar um único documento no MongoDB usando Java?</div>
+        <div class="answer">Use <code>collection.updateOne(eq("nome", "Ana"), new Document("$set", new Document("idade", 23)));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar múltiplos documentos no MongoDB usando Java?</div>
+        <div class="answer">Use <code>collection.updateMany(lt("idade", 30), new Document("$set", new Document("status", "jovem")));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir um único documento no MongoDB usando Java?</div>
+        <div class="answer">Use <code>collection.deleteOne(eq("nome", "Pedro"));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir múltiplos documentos no MongoDB usando Java?</div>
+        <div class="answer">Use <code>collection.deleteMany(lt("idade", 25));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como conectar ao MongoDB usando C#?</div>
+        <div class="answer">Use <code>var client = new MongoClient("mongodb://localhost:27017");</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um banco de dados no MongoDB usando C#?</div>
+        <div class="answer">Use <code>var database = client.GetDatabase("meuBancoDeDados");</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção no MongoDB usando C#?</div>
+        <div class="answer">Use <code>database.CreateCollection("minhaColecao");</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir um único documento no MongoDB usando C#?</div>
+        <div class="answer">Use <code>collection.InsertOne(new BsonDocument { { "nome", "João" }, { "idade", 25 } });</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir múltiplos documentos no MongoDB usando C#?</div>
+        <div class="answer">Use <code>collection.InsertMany(new List<BsonDocument> { new BsonDocument { { "nome", "Ana" }, { "idade", 22 } }, new BsonDocument { { "nome", "Pedro" }, { "idade", 28 } } });</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar todos os documentos de uma coleção no MongoDB usando C#?</div>
+        <div class="answer">Use <code>var documents = collection.Find(new BsonDocument()).ToList();</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como consultar um documento específico no MongoDB usando C#?</div>
+        <div class="answer">Use <code>var document = collection.Find(new BsonDocument("nome", "Ana")).FirstOrDefault();</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar um único documento no MongoDB usando C#?</div>
+        <div class="answer">Use <code>collection.UpdateOne(new BsonDocument("nome", "Ana"), Builders<BsonDocument>.Update.Set("idade", 23));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar múltiplos documentos no MongoDB usando C#?</div>
+        <div class="answer">Use <code>collection.UpdateMany(new BsonDocument("idade", new BsonDocument("$lt", 30)), Builders<BsonDocument>.Update.Set("status", "jovem"));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir um único documento no MongoDB usando C#?</div>
+        <div class="answer">Use <code>collection.DeleteOne(new BsonDocument("nome", "Pedro"));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir múltiplos documentos no MongoDB usando C#?</div>
+        <div class="answer">Use <code>collection.DeleteMany(new BsonDocument("idade", new BsonDocument("$lt", 25)) );</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <script>
+        const cards = document.querySelectorAll('.flash-card');
+        let currentCard = 0;
+
+        function showCard(index) {
+            cards[currentCard].classList.remove('active');
+            currentCard = index;
+            cards[currentCard].classList.add('active');
+        }
+
+        function toggleAnswer(button) {
+            const answer = button.previousElementSibling;
+            if (answer.style.display === "block") {
+                answer.style.display = "none";
+                button.textContent = "Mostrar Resposta";
+            } else {
+                answer.style.display = "block";
+                button.textContent = "Esconder Resposta";
+            }
+        }
+
+        function nextCard() {
+            if (currentCard < cards.length - 1) {
+                showCard(currentCard + 1);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 0) {
+                showCard(currentCard - 1);
+            }
+        }
+    </script>
+    <div class="navigation">
+        <button onclick="prevCard()">Voltar</button>
+        <button onclick="nextCard()">Avançar</button>
+    </div>
+</body>
+</html>
