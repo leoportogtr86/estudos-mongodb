@@ -1,5 +1,3 @@
-Claro! Aqui está uma lista de 10 exercícios focados em operações básicas com MongoDB puro, usando a linha de comando do MongoDB.
-
 ### Exercício 1: Criar um Banco de Dados
 1. Conecte-se ao MongoDB através do shell `mongo`.
 2. Crie um banco de dados chamado `escola`.
