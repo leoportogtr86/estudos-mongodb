@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Cards MongoDB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .flash-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+            height: 200px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.5s;
+            display: none;
+        }
+        .flash-card:hover {
+            transform: scale(1.05);
+        }
+        .flash-card.active {
+            display: block;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #634caf;
+        }
+        .answer {
+            display: none;
+            font-size: 16px;
+            color: #634caf;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #634caf;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #634caf;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            width: 320px;
+        }
+        code {
+            background-color: #bbbbc1;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #634caf;
+        }
+        h2 {
+            color: #7159be;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flash Cards</h1>
+    <h2>Operações Básicas no MongoDB - Criar e Gerenciar Coleções no MongoDB</h2>
+    <div class="flash-card active">
+        <div class="question">Como criar uma coleção implicitamente no MongoDB?</div>
+        <div class="answer">Insira um documento em uma coleção que ainda não existe: <code>db.minhaColecao.insertOne({ nome: "Alice", idade: 30 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção explicitamente no MongoDB?</div>
+        <div class="answer">Use o método <code>createCollection</code>: <code>db.createCollection("minhaColecao")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção limitada no MongoDB?</div>
+        <div class="answer">Use o método <code>createCollection</code> com opções: <code>db.createCollection("minhaColecaoComOpcoes", { capped: true, size: 5242880, max: 5000 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar todas as coleções em um banco de dados no MongoDB usando a linha de comando?</div>
+        <div class="answer">Use o comando <code>show collections</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar todas as coleções em um banco de dados no MongoDB usando JavaScript no shell?</div>
+        <div class="answer">Use o método <code>db.getCollectionNames()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como renomear uma coleção no MongoDB?</div>
+        <div class="answer">Use o método <code>renameCollection</code>: <code>db.minhaColecao.renameCollection("novaNomeDaColecao")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir uma coleção no MongoDB?</div>
+        <div class="answer">Use o método <code>drop</code>: <code>db.minhaColecao.drop()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como verificar se uma coleção foi removida no MongoDB?</div>
+        <div class="answer">Liste todas as coleções novamente usando <code>show collections</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um índice em uma coleção no MongoDB?</div>
+        <div class="answer">Use o método <code>createIndex</code>: <code>db.minhaColecao.createIndex({ nome: 1 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar todos os índices em uma coleção no MongoDB?</div>
+        <div class="answer">Use o método <code>getIndexes</code>: <code>db.minhaColecao.getIndexes()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir um índice em uma coleção no MongoDB?</div>
+        <div class="answer">Use o método <code>dropIndex</code> com o nome do índice: <code>db.minhaColecao.dropIndex("nome_1")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como definir regras de validação ao criar uma coleção no MongoDB?</div>
+        <div class="answer">Use o método <code>createCollection</code> com um validador: <code>db.createCollection("minhaColecaoValidada", { validator: { $jsonSchema: { bsonType: "object", required: ["nome", "idade"], properties: { nome: { bsonType: "string", description: "deve ser uma string e é obrigatório" }, idade: { bsonType: "int", minimum: 0, description: "deve ser um inteiro não negativo e é obrigatório" } } } } })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar regras de validação em uma coleção existente no MongoDB?</div>
+        <div class="answer">Use o comando <code>collMod</code>: <code>db.runCommand({ collMod: "minhaColecao", validator: { $jsonSchema: { bsonType: "object", required: ["nome", "idade"], properties: { nome: { bsonType: "string", description: "deve ser uma string e é obrigatório" }, idade: { bsonType: "int", minimum: 0, description: "deve ser um inteiro não negativo e é obrigatório" } } } } })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">O que é uma coleção limitada no MongoDB?</div>
+        <div class="answer">Uma coleção limitada tem um tamanho fixo e atua como um buffer circular.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como definir o tamanho máximo de uma coleção limitada no MongoDB?</div>
+        <div class="answer">Use a opção <code>size</code> ao criar a coleção: <code>db.createCollection("minhaColecaoComOpcoes", { capped: true, size: 5242880, max: 5000 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como definir o número máximo de documentos em uma coleção limitada no MongoDB?</div>
+        <div class="answer">Use a opção <code>max</code> ao criar a coleção: <code>db.createCollection("minhaColecaoComOpcoes", { capped: true, size: 5242880, max: 5000 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção com validação JSON Schema no MongoDB?</div>
+        <div class="answer">Use o método <code>createCollection</code> com um validador JSON Schema: <code>db.createCollection("minhaColecaoValidada", { validator: { $jsonSchema: { bsonType: "object", required: ["nome", "idade"], properties: { nome: { bsonType: "string", description: "deve ser uma string e é obrigatório" }, idade: { bsonType: "int", minimum: 0, description: "deve ser um inteiro não negativo e é obrigatório" } } } } })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como adicionar um índice ascendente em um campo no MongoDB?</div>
+        <div class="answer">Use o método <code>createIndex</code> com <code>1</code> como valor: <code>db.minhaColecao.createIndex({ nome: 1 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como adicionar um índice descendente em um campo no MongoDB?</div>
+        <div class="answer">Use o método <code>createIndex</code> com <code>-1</code> como valor: <code>db.minhaColecao.createIndex({ nome: -1 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como remover todos os documentos de uma coleção no MongoDB sem remover a coleção?</div>
+        <div class="answer">Use o método <code>deleteMany</code> sem filtro: <code>db.minhaColecao.deleteMany({})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como garantir que um campo é único em uma coleção no MongoDB?</div>
+        <div class="answer">Crie um índice único no campo: <code>db.minhaColecao.createIndex({ nome: 1 }, { unique: true })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um índice composto no MongoDB?</div>
+        <div class="answer">Use o método <code>createIndex</code> com múltiplos campos: <code>db.minhaColecao.createIndex({ nome: 1, idade: -1 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar os índices de uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>list_indexes</code>: <code>collection.list_indexes()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção com tamanho máximo no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>create_collection</code> com a opção <code>size</code>: <code>db.create_collection("minhaColecaoComTamanho", size=5242880)</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como definir validação de documentos ao criar uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>create_collection</code> com um validador: <code>db.create_collection("minhaColecaoValidada", validator={"$jsonSchema": {"bsonType": "object", "required": ["nome", "idade"], "properties": {"nome": {"bsonType": "string"}, "idade": {"bsonType": "int", "minimum": 0}}}})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como atualizar regras de validação em uma coleção existente no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o comando <code>collMod</code>: <code>db.command({"collMod": "minhaColecao", "validator": {"$jsonSchema": {"bsonType": "object", "required": ["nome", "idade"], "properties": {"nome": {"bsonType": "string"}, "idade": {"bsonType": "int", "minimum": 0}}}}})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>drop</code>: <code>db.minhaColecao.drop()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um índice em um campo no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>create_index</code>: <code>db.minhaColecao.create_index("nome")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção com um índice único no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>create_index</code> com a opção <code>unique</code>: <code>db.minhaColecao.create_index("nome", unique=True)</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção com opções no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>create_collection</code> com opções: <code>db.create_collection("minhaColecaoComOpcoes", capped=True, size=5242880, max=5000)</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como inserir um documento em uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>insert_one</code>: <code>db.minhaColecao.insert_one({"nome": "Alice", "idade": 30})</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar todas as coleções em um banco de dados no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>list_collection_names</code>: <code>db.list_collection_names()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como renomear uma coleção no MongoDB usando PyMongo?</div>
+        <div class="answer">Use o método <code>rename_collection</code>: <code>db.minhaColecao.rename("novaNomeDaColecao")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção com validação no MongoDB usando Node.js?</div>
+        <div class="answer">Use o método <code>createCollection</code> com um validador: <code>db.createCollection("minhaColecaoValidada", { validator: { $jsonSchema: { bsonType: "object", required: ["nome", "idade"], properties: { nome: { bsonType: "string" }, idade: { bsonType: "int", minimum: 0 } } } } })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar todas as coleções em um banco de dados no MongoDB usando Node.js?</div>
+        <div class="answer">Use o método <code>listCollections</code>: <code>db.listCollections().toArray()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção limitada no MongoDB usando Node.js?</div>
+        <div class="answer">Use o método <code>createCollection</code> com a opção <code>capped</code>: <code>db.createCollection("minhaColecaoComOpcoes", { capped: true, size: 5242880, max: 5000 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como renomear uma coleção no MongoDB usando Node.js?</div>
+        <div class="answer">Use o método <code>renameCollection</code>: <code>db.renameCollection("minhaColecao", "novaNomeDaColecao")</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir uma coleção no MongoDB usando Node.js?</div>
+        <div class="answer">Use o método <code>drop</code>: <code>db.collection("minhaColecao").drop()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um índice em um campo no MongoDB usando Node.js?</div>
+        <div class="answer">Use o método <code>createIndex</code>: <code>db.collection("minhaColecao").createIndex({ nome: 1 })</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar os índices de uma coleção no MongoDB usando Node.js?</div>
+        <div class="answer">Use o método <code>listIndexes</code>: <code>db.collection("minhaColecao").listIndexes().toArray()</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como definir validação de documentos ao criar uma coleção no MongoDB usando Java?</div>
+        <div class="answer">Use o método <code>createCollection</code> com um validador: <code>database.createCollection("minhaColecaoValidada", new CreateCollectionOptions().validationOptions(new ValidationOptions().validator(new Document("$jsonSchema", new Document("bsonType", "object").append("required", Arrays.asList("nome", "idade")).append("properties", new Document("nome", new Document("bsonType", "string")).append("idade", new Document("bsonType", "int").append("minimum", 0)))))));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção limitada no MongoDB usando Java?</div>
+        <div class="answer">Use o método <code>createCollection</code> com a opção <code>capped</code>: <code>database.createCollection("minhaColecaoComOpcoes", new CreateCollectionOptions().capped(true).sizeInBytes(5242880).maxDocuments(5000));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar todas as coleções em um banco de dados no MongoDB usando Java?</div>
+        <div class="answer">Use o método <code>listCollectionNames</code>: <code>database.listCollectionNames().into(new ArrayList<>());</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como renomear uma coleção no MongoDB usando Java?</div>
+        <div class="answer">Use o método <code>renameCollection</code>: <code>database.getCollection("minhaColecao").renameCollection(new MongoNamespace(database.getName(), "novaNomeDaColecao"));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir uma coleção no MongoDB usando Java?</div>
+        <div class="answer">Use o método <code>drop</code>: <code>database.getCollection("minhaColecao").drop();</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um índice em um campo no MongoDB usando Java?</div>
+        <div class="answer">Use o método <code>createIndex</code>: <code>database.getCollection("minhaColecao").createIndex(Indexes.ascending("nome"));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar os índices de uma coleção no MongoDB usando Java?</div>
+        <div class="answer">Use o método <code>listIndexes</code>: <code>database.getCollection("minhaColecao").listIndexes().into(new ArrayList<>());</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção com validação no MongoDB usando C#?</div>
+        <div class="answer">Use o método <code>CreateCollection</code> com um validador: <code>database.CreateCollection("minhaColecaoValidada", new CreateCollectionOptions<BsonDocument> { Validator = new BsonDocument { { "$jsonSchema", new BsonDocument { { "bsonType", "object" }, { "required", new BsonArray { "nome", "idade" } }, { "properties", new BsonDocument { { "nome", new BsonDocument { { "bsonType", "string" } } }, { "idade", new BsonDocument { { "bsonType", "int" }, { "minimum", 0 } } } } } } } } });</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar uma coleção limitada no MongoDB usando C#?</div>
+        <div class="answer">Use o método <code>CreateCollection</code> com a opção <code>capped</code>: <code>database.CreateCollection("minhaColecaoComOpcoes", new CreateCollectionOptions { Capped = true, MaxSize = 5242880, MaxDocuments = 5000 });</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar todas as coleções em um banco de dados no MongoDB usando C#?</div>
+        <div class="answer">Use o método <code>ListCollections</code>: <code>var collections = database.ListCollections().ToList();</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como renomear uma coleção no MongoDB usando C#?</div>
+        <div class="answer">Use o método <code>RenameCollection</code>: <code>database.RenameCollection("minhaColecao", "novaNomeDaColecao");</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como excluir uma coleção no MongoDB usando C#?</div>
+        <div class="answer">Use o método <code>DropCollection</code>: <code>database.DropCollection("minhaColecao");</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como criar um índice em um campo no MongoDB usando C#?</div>
+        <div class="answer">Use o método <code>CreateIndex</code>: <code>collection.Indexes.CreateOne(new CreateIndexModel<BsonDocument>(Builders<BsonDocument>.IndexKeys.Ascending("nome")));</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    <div class="flash-card">
+        <div class="question">Como listar os índices de uma coleção no MongoDB usando C#?</div>
+        <div class="answer">Use o método <code>ListIndexes</code>: <code>var indexes = collection.Indexes.List().ToList();</code>.</div>
+        <button onclick="toggleAnswer(this)">Mostrar Resposta</button>
+    </div>
+    
+    <script>
+        const cards = document.querySelectorAll('.flash-card');
+        let currentCard = 0;
+
+        function showCard(index) {
+            cards[currentCard].classList.remove('active');
+            currentCard = index;
+            cards[currentCard].classList.add('active');
+        }
+
+        function toggleAnswer(button) {
+            const answer = button.previousElementSibling;
+            if (answer.style.display === "block") {
+                answer.style.display = "none";
+                button.textContent = "Mostrar Resposta";
+            } else {
+                answer.style.display = "block";
+                button.textContent = "Esconder Resposta";
+            }
+        }
+
+        function nextCard() {
+            if (currentCard < cards.length - 1) {
+                showCard(currentCard + 1);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 0) {
+                showCard(currentCard - 1);
+            }
+        }
+    </script>
+    <div class="navigation">
+        <button onclick="prevCard()">Voltar</button>
+        <button onclick="nextCard()">Avançar</button>
+    </div>
+</body>
+</html>
